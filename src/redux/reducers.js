@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { handleAction } from 'redux-actions';
 import {
   increment_counter,
   decrement_counter,
