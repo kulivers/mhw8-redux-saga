@@ -1,89 +1,78 @@
 import React, { Component } from 'react';
-import { get_users_phones } from '../redux/selectors';
-import {
-  increment_counter,
-  decrement_counter,
-  add_word,
-  delete_word,
-  fetch_users,
-  set_users,
-} from '../redux/actionsCreators';
 import { connect } from 'react-redux';
+import {
+  authoritize,
+  signOut,
+  getUsersFailture,
+  getUsersRequest,
+  getUsersSuccess,
+  getTestRequest,
+} from '../redux/actionsCreators';
 import './App.css';
-import UsersPanel from './UsersPanel';
 
 export class App extends Component {
-  state = { word: '' };
+  state = {
+    username: '111',
+    showComponent: true,
+  };
   render() {
-    const {
-      increment_counter,
-      decrement_counter,
-      add_word,
-      delete_word,
-      set_users,
-      users_phones,
-      words,
-      fetch_users,
-      counter,
-      users,
-    } = this.props;
-
     return (
       <div>
-        <div>
-          <button onClick={increment_counter}>+1</button>
-          <button onClick={decrement_counter}>-1</button>
-        </div>
-        <div>Counter: {counter}</div>
+        <button
+          onClick={() => {
+            this.props.getTestRequest();
+          }}
+        >
+          3 FORK saga to getUsersRequest (takeEvery)
+        </button>
+        <button onClick={() => this.props.getTestRequest()}>
+          push me three times (take)
+        </button>
+        <div>check console</div>
         <hr />
+        <h1>some try to login/logout, if user isLogged - cout users</h1>
+        <h1> wrong working auth</h1>
         <input
-          value={this.state.word}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              add_word(this.state.word);
-            }
-          }}
+          autoFocus={true}
+          name="username"
+          value={this.state.username}
           onChange={(e) => {
-            this.setState({ word: e.target.value });
+            this.setState({ [e.target.name]: e.target.value });
           }}
-          autoFocus
-          onFocus={(e) => e.currentTarget.select()}
-        />
+          placeholder="egor/111/222/333"
+        ></input>
         <button
           onClick={() => {
-            add_word(this.state.word);
+            this.props.authoritize(this.state.username);
           }}
         >
-          Добавить
+          authoritize
         </button>
-        <button
-          onClick={() => {
-            delete_word();
-          }}
-        >
-          Удалить
-        </button>
-        <button
-          onClick={() => {
-            console.log(users);
-          }}
-        >
-          show users in console
-        </button>
-        <button
-          onClick={() => {
-            console.log(users_phones);
-          }}
-        >
-          show users phones in console
-        </button>
-        <div>{words}</div>
+        <button onClick={this.props.signOut}> sign out</button>
+        <div>
+          you are: {this.props.isLogged ? 'logged in' : 'not logged in'}
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              this.props.getUsersRequest();
+            }}
+          >
+            simulate request
+          </button>
+          {this.props.isLogged && (
+            <ul>
+              {this.props.users.map((user) => (
+                <li key={user.id}>
+                  {user.id}, {user.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <hr />
-        <UsersPanel
-          users={users}
-          fetchUsers={fetch_users}
-          setUsers={set_users}
-        />
+        <h1>Component for tests</h1>
+        <button>show Component</button>
       </div>
     );
   }
@@ -91,20 +80,19 @@ export class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    counter: state.countReducer.counter,
-    words: state.wordReducer.words,
-    users: state.userReducer.users,
-    users_phones: get_users_phones(state),
+    users: state.users,
+    loadingState: state.requestState,
+    isLogged: state.isLogged,
   };
 };
 
 const mapDispatchToProps = {
-  increment_counter,
-  decrement_counter,
-  add_word,
-  delete_word,
-  fetch_users,
-  set_users,
+  getUsersRequest,
+  getTestRequest,
+  getUsersSuccess,
+  getUsersFailture,
+  authoritize,
+  signOut,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

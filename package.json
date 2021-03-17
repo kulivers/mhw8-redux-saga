@@ -3,9 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-react": "^7.12.13",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-preset-jest": "^26.6.2",
+    "eslint-plugin-jest": "^24.3.2",
+    "generator-jest": "^1.8.0",
+    "jest": "^26.6.3",
+    "jest-canvas-mock": "^2.3.1",
+    "jest-cli": "^26.6.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
@@ -19,9 +27,20 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "jest --watch"
   },
+  "type": "module",
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs"
+  },
+  "activationEvents": [
+    "workspaceContains:node_modules/.bin/jest",
+    "workspaceContains:node_modules/react-scripts/node_modules/.bin/jest",
+    "workspaceContains:node_modules/react-native-scripts",
+    "onCommand:io.orta.jest.start"
+  ],
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -39,5 +58,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.6.3",
+    "react-test-renderer": "^17.0.1"
   }
 }

@@ -1,58 +1,47 @@
 import { combineReducers } from 'redux';
-import { handleActions } from 'redux-actions';
+import { handleActions, handleAction } from 'redux-actions';
 import {
-  increment_counter,
-  decrement_counter,
-  add_word,
-  delete_word,
-  set_users,
-} from '../redux/actionsCreators';
+  authoritizeFailture,
+  authoritizeSuccess,
+  authoritize,
+  signOut,
+  getUsersRequest,
+  getUsersSuccess,
+  getUsersFailture,
+  getTestRequest,
+} from './actionsCreators';
+// console.log(authoritizeSuccess); // function
+// console.log(authoritizeSuccess.toString()); //string - 'AUTHORITIZE_SUCCESS'
+// console.log(authoritizeSuccess()); //{type: 'AUTHORITIZE_SUCCESS'}
 
-const initialState = { counter: 0, words: 'some very good text', users: [] };
-
-const userReducer = handleActions(
-  {
-    [set_users.toString()]: (state, action) => {
-      console.log('im in set_users reducer');
-      // console.log(action);
-      return { users: action.payload };
-    },
-  },
-  initialState
+const users = handleAction(
+  [getUsersSuccess.toString()],
+  (_state, action) => action.payload,
+  []
 );
 
-const countReducer = handleActions(
-  {
-    [increment_counter.toString()]: (state) => ({
-      counter: state.counter + 1,
-    }),
-    [decrement_counter.toString()]: (state) => ({
-      counter: state.counter - 1,
-    }),
-  },
-  initialState
+const error = handleAction(
+  [getUsersFailture.toString()],
+  (_state, action) => action.payload,
+  null
 );
 
-const wordReducer = handleActions(
+const requestState = handleActions(
   {
-    [add_word.toString()]: (state, { payload }) => {
-      let newWords = state.words.split(' ');
-      newWords.push(payload);
-      newWords = newWords.join(' ');
-      return { ...state, words: newWords };
-    },
-    [delete_word.toString()]: (state) => {
-      let newWords = state.words.split(' ');
-      newWords.pop();
-      newWords = newWords.join(' ');
-      return { ...state, words: newWords };
-    },
+    [getUsersRequest.toString()]: (state, action) => 'LOADING',
+    [getUsersSuccess.toString()]: (state, action) => 'SUCCESS',
+    [getUsersFailture.toString()]: (state, action) => 'FAILTURE',
+    [getTestRequest.toString()]: (state, action) => 'TEST',
   },
-  initialState
+  'NOT_INITILIAIZED'
+);
+//userstate -loggedIn/not
+const isLogged = handleActions(
+  {
+    [authoritizeSuccess.toString()]: (state, action) => true,
+    [authoritizeFailture.toString()]: (state, action) => false,
+  },
+  false
 );
 
-export default combineReducers({
-  countReducer: countReducer,
-  wordReducer: wordReducer,
-  userReducer: userReducer,
-});
+export default combineReducers({ users, requestState, isLogged });

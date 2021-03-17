@@ -1,47 +1,38 @@
 import { createActions } from 'redux-actions';
-// export const incCounter = createAction('INCREMENT_COUNTER');
-// export const decCounter = createAction('DECREMENT_COUNTER');
-// export const addWord = createAction(TYPES.ADD_WORD); //same as createAction(TYPES.DECREMENT_COUNTER, payload => payload );
-// export const deleteWord = createAction(TYPES.DELETE_WORD);
 
-const rootActionCreator = createActions({
-  APP: {
-    COUNTER: { INC_COUNTER: null, DEC_COUNTER: null },
-    WORDS: { ADD_WORD: null, DELETE_WORD: null },
-  },
+// console.log(authoritizeSuccess); // function
+// console.log(authoritizeSuccess.toString()); //string - 'AUTHORITIZE_SUCCESS'
+// console.log(authoritizeSuccess()); //{type: 'AUTHORITIZE_SUCCESS'}
+const requestActions = createActions({
   USERS: {
-    GET_USERS_COUNT: null,
-    GET_USERS: null,
-    SET_USERS: null,
-    ADD_USER: null,
-    DELETE_USER: null,
-    CLEAR_USERS: null,
+    GET_REQUEST: null,
+    GET_SUCCESS: null,
+    GET_FAILTURE: null,
+    TEST_REQUEST: null,
   },
 });
 
 export const {
-  app: {
-    counter: { incCounter: increment_counter, decCounter: decrement_counter },
-    words: { addWord: add_word, deleteWord: delete_word },
-  },
   users: {
-    getUsers: get_users,
-    getUsersCount: get_users_count,
-    addUser: add_user,
-    setUsers: set_users,
-    deleteUser: delete_user,
-    clearUsers: clear_users,
+    getRequest: getUsersRequest,
+    getSuccess: getUsersSuccess,
+    getFailture: getUsersFailture,
+    testRequest: getTestRequest,
   },
-} = rootActionCreator;
+} = requestActions;
 
-export const fetch_users = () => {
-  return (dispatch) => {
-    // console.log('im in get users creator');
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((Response) => Response.json())
-      .then((result) => {
-        console.log('im in fetch users thunk creator');
-        dispatch(set_users(result));
-      });
-  };
-};
+const loginActions = createActions({
+  AUTHORITIZE: null,
+  AUTHORITIZE_SUCCESS: null,
+  AUTHORITIZE_FAILTURE: null,
+  SIGN_OUT: null,
+});
+
+export const {
+  authoritizeSuccess: authoritizeSuccess,
+  authoritizeFailture: authoritizeFailture,
+  authoritize: authoritize,
+  signOut: signOut,
+} = loginActions;
+
+// export { getUsersRequest, getUsersSuccess, getUsersFailture };
